@@ -29,3 +29,9 @@ class GetStackExchange:
             "sort" : sort,
             "site" : "stackoverflow"
         }
+        try:
+            response = requests.get(self.EP.format('search'), params=param)
+            json_response = response.json()
+            return json_response
+        except Exception as err:
+            print(f'Other error occurred: {err}')
