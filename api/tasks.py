@@ -1,6 +1,6 @@
 from celery import *
 
-from .models import *
+from api.models import *
 
 
 def searchtask(query, apidata):

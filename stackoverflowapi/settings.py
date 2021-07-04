@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'api'
+    'api',
+    'djcelery'
 ]
 
 MIDDLEWARE = [
@@ -153,7 +154,7 @@ REST_FRAMEWORK = {
 # }   
 
 
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 
 
 CELERY_ACCEPT_CONTENT = ['application/json']

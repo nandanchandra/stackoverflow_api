@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.throttling import UserRateThrottle,AnonRateThrottle
+from rest_framework.throttling import AnonRateThrottle
 
 from .utils import GetStackExchange
 
@@ -12,7 +12,7 @@ class GetQuestionsView(APIView):
 
 
 	def get(self,request,*args,**kwargs):
-		page=self.request.query_params.get("page")
+		page=self.request.GET.get("page")
 		all_ques = GetStackExchange()
 		all_ques = all_ques.get_all_questions(page)
 		return Response(all_ques,status=status.HTTP_200_OK)
@@ -20,7 +20,7 @@ class GetQuestionsView(APIView):
 
 class QuestionView(APIView):
 
-	throttle_classes = [UserRateThrottle,AnonRateThrottle]
+	throttle_classes = [AnonRateThrottle]
 
 
 	def get(self,request,*args,**kwargs):
@@ -43,7 +43,7 @@ class QuestionView(APIView):
 
 class AdvanceSearchView(APIView):
 
-	throttle_classes = [UserRateThrottle,AnonRateThrottle]
+	throttle_classes = [AnonRateThrottle]
 
 	def get(self,request,*args,**kwargs):
 		page=self.request.GET.get("page")

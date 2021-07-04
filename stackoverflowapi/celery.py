@@ -6,11 +6,14 @@ from django.conf import settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stackoverflowapi.settings')
 app = Celery('stackoverflowapi')
 
-app.config_from_object('django.conf:settings',namespace='CELERY')
-app.autodiscover_tasks()
+BASE_REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 
-@app.task(bind=True)
-def debug_task(self):
-    print('Request: {0!r}'.format(self.request))
+app.config_from_object('django.conf:settings')
+app.autodiscover_tasks()
+app.conf.broker_url = BASE_REDIS_URL
+
+# @app.task(bind=True)
+# def debug_task(self):
+#     print('Request: {0!r}'.format(self.request))
 
 
