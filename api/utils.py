@@ -1,6 +1,5 @@
 import requests
-
-import json
+from api.tasks import searchtask, answertask
 
 class GetStackExchange:
 
@@ -32,6 +31,7 @@ class GetStackExchange:
         try:
             response = requests.get(self.EP.format('search'), params=param)
             json_response = response.json()
+            searchtask(tagged,json_response)
             return json_response
         except Exception as err:
             print(f'Other error occurred: {err}')
@@ -46,7 +46,9 @@ class GetStackExchange:
         }
         try:
             response = requests.get(self.EP.format('search/advanced'), params=param)
-            return response.json()
+            json_response = response.json()
+            searchtask(q,json_response)
+            return json_response
         except Exception as err:
             print(f'Other error occurred: {err}')
 
@@ -59,6 +61,8 @@ class GetStackExchange:
         }
         try:
             response = requests.get(self.EP.format('questions/'+str(question_id)+'/answers'), params=param)
+            json_response = response.json()
+            answertask(question_id,json_response)
             return response.json()
         except Exception as err:
             print(f'Other error occurred: {err}')
