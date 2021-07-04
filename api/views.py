@@ -1,16 +1,15 @@
-from django.db.models import query
-from django.db.models.query_utils import Q
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import UserRateThrottle,AnonRateThrottle
 
 from .utils import GetStackExchange
 
 from api.models import Questions,Answers
 from api.serializers import QuestionSerializer,AnswersSerializer
 
-class All_questions_View(APIView):
+class GetQuestionsView(APIView):
+
 
 	def get(self,request,*args,**kwargs):
 		page=self.request.query_params.get("page")
@@ -20,6 +19,9 @@ class All_questions_View(APIView):
 
 
 class QuestionView(APIView):
+
+	throttle_classes = [UserRateThrottle,AnonRateThrottle]
+
 
 	def get(self,request,*args,**kwargs):
 		page = self.request.GET.get("page")
@@ -40,6 +42,8 @@ class QuestionView(APIView):
 		return Response(qr,status=status.HTTP_200_OK)
 
 class AdvanceSearchView(APIView):
+
+	throttle_classes = [UserRateThrottle,AnonRateThrottle]
 
 	def get(self,request,*args,**kwargs):
 		page=self.request.GET.get("page")
