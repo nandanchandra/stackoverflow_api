@@ -23,7 +23,7 @@ class GetStackExchange:
 
     def search(self, page, tagged, order="desc", sort="activity", site="stackoverflow"):
         param={
-            "tagged" : "python",
+            "tagged" : tagged,
             "page": page,
             "order": order,
             "sort" : sort,
