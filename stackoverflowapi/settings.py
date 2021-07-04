@@ -142,3 +142,12 @@ REST_FRAMEWORK = {
         'sustained': '100/day'
     }
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}   
