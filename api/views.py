@@ -22,10 +22,10 @@ class All_questions_View(APIView):
 class Query_ques_View(APIView):
 
 	def get(self,request,*args,**kwargs):
-		page = request.GET.get("page")
-		query = request.GET.get("query")
-		sort = request.GET.get("sort")
-		order = request.GET.get("order")
+		page = self.request.GET.get("page")
+		query = self.request.GET.get("query")
+		sort =self.request.GET.get("sort")
+		order =self.request.GET.get("order")
 
 		qs = Questions.objects.filter(query=query)
 		if qs.exists():
