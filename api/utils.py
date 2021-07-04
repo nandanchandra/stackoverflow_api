@@ -19,3 +19,13 @@ class GetStackExchange:
             return json_response
         except Exception as err:
             print(f'Other error occurred: {err}')
+
+
+    def search(self, page, tagged, order="desc", sort="activity", site="stackoverflow"):
+        param={
+            "tagged" : tagged,
+            "page": page,
+            "order": order,
+            "sort" : sort,
+            "site" : "stackoverflow"
+        }
