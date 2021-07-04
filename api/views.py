@@ -7,8 +7,8 @@ from rest_framework.views import APIView
 
 from .utils import GetStackExchange
 
-from api.models import Questions
-from api.serializers import QuestionSerializer
+from api.models import Questions,Answers
+from api.serializers import QuestionSerializer,AnswersSerializer
 
 class All_questions_View(APIView):
 
@@ -56,4 +56,23 @@ class AdvanceSearchView(APIView):
 		advanceresult = advanceresult.advanceSearch(query,page)
 		return Response(advanceresult,status=status.HTTP_200_OK)
 
+
+class QuestionsAnswer(APIView):
+	def get(self,request,*args,**kwargs):
+		question_id = self.request.GET.get("quesid",None)
+		
+		if question_id is None:
+			return Response({"error":"Question Id is required"},status=400)
+
+		qs = Answers.objects.filter(question_id=question_id)
+
+		if qs.exists():
+			objects = qs.first()
+			serialized_data = AnswersSerializer(objects)
+			data = serialized_data.data['data']
+			return Response(data,status=status.HTTP_200_OK)
+
+		res = GetStackExchange()
+		res = res.answer(question_id)
+		return Response(res,status=status.HTTP_200_OK)
 

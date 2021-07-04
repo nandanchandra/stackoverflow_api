@@ -49,3 +49,16 @@ class GetStackExchange:
             return response.json()
         except Exception as err:
             print(f'Other error occurred: {err}')
+
+    def answer(self,question_id, order="desc", sort="activity", site="stackoverflow"):
+        param={
+            "question_id": question_id,
+            "order": order,
+            "sort" : sort,
+            "site" : "stackoverflow"
+        }
+        try:
+            response = requests.get(self.EP.format('questions/'+str(question_id)+'/answers'), params=param)
+            return response.json()
+        except Exception as err:
+            print(f'Other error occurred: {err}')
