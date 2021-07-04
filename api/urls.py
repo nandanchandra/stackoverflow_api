@@ -4,6 +4,7 @@ from . views import *
 
 urlpatterns = [
     url('questions/$',All_questions_View.as_view(),name='all_ques'),
-    url('search/$',Query_ques_View.as_view(),name='search'),
+    url('search/$',QuestionView.as_view(),name='search'),
+    url('searchAd/$',AdvanceSearchView.as_view(),name='searchAd'),
 
 ]
