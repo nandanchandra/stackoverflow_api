@@ -1,11 +1,9 @@
-from django.conf.urls import url
-
+from django.urls import path
 from . views import *
 
 urlpatterns = [
-    url('questions/$',GetQuestionsView.as_view(),name='questions'),
-    url('search/$',QuestionView.as_view(),name='search'),
-    url('searchAd/$',AdvanceSearchView.as_view(),name='searchAd'),
-    url('answer/$',QuestionsAnswer.as_view(),name='answer'),
-
+    path('<str:questions>/',GetQuestionsView.as_view(),name='questions'),
+    path('<str:search>/',QuestionView.as_view(),name='search'),
+    path('<str:advanced>/',AdvanceSearchView.as_view(),name='advanced'),
+    path('<str:answer>/',QuestionsAnswer.as_view(),name='answer'),
 ]

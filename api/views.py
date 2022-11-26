@@ -79,4 +79,3 @@ class QuestionsAnswer(APIView):
 		res = GetStackExchange()
 		res = res.answer(question_id)
 		return Response(res,status=status.HTTP_200_OK)
-

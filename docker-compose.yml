@@ -1,0 +1,103 @@
+version: "3"
+services:
+  stackoverflowapi:
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    command: /start
+    container_name: stackoverflowapi
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    env_file:
+      - ./.envs/.django
+      - ./.envs/.postgres
+    depends_on:
+      - postgres
+      - redis
+    restart: "on-failure"
+    networks:
+      - stackoverflowapi-networks
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./docker/postgres/Dockerfile
+    container_name: postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+      - local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.postgres
+    networks:
+      - stackoverflowapi-networks
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    command: /start-flower
+    container_name: flower
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.django
+      - ./.envs/.postgres
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - postgres
+      - celery_worker
+    networks:
+      - stackoverflowapi-networks
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis
+    networks:
+      - stackoverflowapi-networks
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    command: /start-celeryworker
+    container_name: celery_worker
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.django
+      - ./.envs/.postgres
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - stackoverflowapi-networks
+
+  nginx:
+    restart: always
+    depends_on:
+      - stackoverflowapi
+    volumes:
+      - ./staticfiles:/app/staticfiles
+      - ./mediafiles:/app/mediafiles
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80
+
+    networks:
+      - stackoverflowapi-networks
+
+networks:
+  stackoverflowapi-networks:
+    driver: bridge
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+  static_volume:
+  media_volume:

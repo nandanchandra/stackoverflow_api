@@ -1,0 +1,10 @@
+celery==4.4.2
+django
+djangorestframework
+django-cors-headers
+django-environ
+flower
+psycopg2-binary
+requests
+redis
+watchdog
